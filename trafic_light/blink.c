@@ -55,12 +55,15 @@ int main() {
   // Change the data direction for ports to input
   PORT_D_DDR = 0b11111111;
   // Start with both red
-  PORT_D |= NS_RED_BIT | EW_RED_BIT | EW_YELLOW_BIT;
+  PORT_D |= NS_RED_BIT | EW_RED_BIT;
+  delay(500);
   while (1) {
     // Handle north / south
     ns_to_green();
     delay(2500);
     ns_to_red();
+
+    delay(250);
 
     // Change direction
     ew_to_green();

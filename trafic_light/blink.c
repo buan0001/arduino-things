@@ -91,7 +91,23 @@ void ew_pedestrian_to_red() {
   PORT_B &= ~(EW_GREEN_PEDSTRIAN);
 }
 
-// TODO: Handle button press to delay time until next green. 
+void interruptable_delay(volatile long time) {
+  time *= 1000;
+  // If time is bigger than min_time and the button is pressed in the correct
+  // direction - delay with min_time instead
+  long min_time = time * 0.2;
+
+  while (time) {
+    if (direction == 1 && NS_BUTTON_INPUT) {
+      // Turn on the light indicating that the button has been pressed
+      PORT_D |= NS_BUTTON_PRESSED;
+      delay(min_time);
+      break;
+    }
+  }
+}
+
+// TODO: Handle button press to delay time until next green.
 int main() {
   // Change the data direction for the ports to input
   // The last 2 ports will be used to indicate whether the pedestrian crossing
@@ -116,6 +132,8 @@ int main() {
     delay(300);
 
     ns_pedestrian_to_green();
+    // If the button was pressed - turn it off again
+    PORT_D &= ~(NS_BUTTON_PRESSED);
 
     delay(1500);
 
@@ -123,17 +141,14 @@ int main() {
     delay(500);
     ns_to_red();
     // Small delay between one side turning red and the other turning green
-    delay(250);
-    if (PORT_B & EW_BUTTON_PRESSED) {
-      PORT_D |= EW_BUTTON_PRESSED | NS_BUTTON_PRESSED;
-    } else {
-      PORT_D &= ~(EW_BUTTON_PRESSED | NS_BUTTON_PRESSED);
-    }
     // Change direction
     direction = 1;
 
     ew_to_green();
     delay(300);
+
+    // Turn off pedestrian light if it was on
+    PORT_D &= ~(EW_BUTTON_PRESSED);
     ew_pedestrian_to_green();
 
     delay(1500);

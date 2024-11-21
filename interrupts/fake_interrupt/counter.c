@@ -18,15 +18,13 @@
 // jeg har en ekstra lille hjælpermacro til bits
 #define bit(n) (1 << n)
 
-void toggle() { PORTB ^= bit(0); }
+void increment() { PORTB ^= bit(0); }
 
 void wait() {
-  
   for (volatile long i = 0; i < 1000000; i++) {
-    
     if (~PIND & bit(2) && i < 800000) {
       i = 800000;
-      toggle();
+      increment();
     }
   }
 }

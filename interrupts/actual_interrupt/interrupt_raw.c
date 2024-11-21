@@ -49,7 +49,7 @@
 // Bit 7 MUST be set for any interrupt to be enabled
 #define SREG port(0x5f)
 
-void toggle() { PORTB ^= bit(0); }
+void increment() { PORTB ^= bit(0); }
 
 void wait() {
   for (volatile long i = 0; i < 1000000; i++) {
@@ -93,7 +93,7 @@ void setup() {
 
 void __vector_1(void) __attribute__((interrupt));
 
-void __vector_1(void) { toggle(); }
+void __vector_1(void) { increment(); }
 
 int main() {
   setup();

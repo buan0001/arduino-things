@@ -2,8 +2,7 @@
 // #include <avr/iom328p.h>
 #include <avr/interrupt.h>
 
-
-void toggle() { PORTB ^= _BV(0); }
+void increment() { PORTB ^= _BV(0); }
 
 void wait() {
   for (volatile long i = 0; i < 1000000; i++) {
@@ -11,7 +10,6 @@ void wait() {
 }
 
 void loop() {
-
   // static unsigned char count = 0;
   // turn of upper _BVs - then set them again with the counter
   PORTB = (PORTD & 0x0f) | (TCNT0 << 4);
@@ -54,9 +52,7 @@ void setup() {
   TCCR0B |= (_BV(1) | _BV(2));
 }
 
-ISR(INT0_vect){
-  toggle();
-}
+ISR(INT0_vect) { increment(); }
 
 int main() {
   setup();

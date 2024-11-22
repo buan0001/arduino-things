@@ -21,28 +21,32 @@ AVRDUDE = avrdude
 # -P the port
 # -b the baud rate
 # -D disable auto erase for flash
-# AVRDUDE_FLAGS = -v -p $(MCU) -c $(PROGRAMMER) -P $(PORT) -D
 AVRDUDE_FLAGS = -v -p $(MCU) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -D
 
-FILE_NAME = traffic_light
+OBJCOPY = avr-objcopy 
+# OBJCOPY_FLAGS = -O ihex a.out a.hex
+OBJCOPY_FLAGS = -O ihex $(FILE_NAME).out $(FILE_NAME).hex
+
+FILE_NAME = a
+#FILE_NAME = traffic_light
 
 all: compile hex avr_run
 
 
-compile:
-	$(CC) $(CFLAGS) -o $(FILE_NAME).o $(FILE_NAME).c
 
-hex: $(FILE_NAME).o
-# -R .eeprom removes the eeprom section from the hex file
-# -O ihex specifies the output format to be ihex
-	avr-objcopy -O ihex $(FILE_NAME).o $(FILE_NAME).hex
+compile:
+	$(CC) $(CFLAGS) -c *.c
+	$(CC) $(CFLAGS) *.o
+#$(CC) $(CFLAGS) -o $(FILE_NAME).o $(FILE_NAME).c
+
+hex:
+	$(OBJCOPY) $(OBJCOPY_FLAGS)
 
 avr_run:
 	$(AVRDUDE) $(AVRDUDE_FLAGS) -U flash:w:$(FILE_NAME).hex:i
-#$(AVRDUDE) $(AVRDUDE_FLAGS) -U flash:w:$(file).hex:i
 
 clean:
-	rm *.o *.elf *.hex
+	rm *.o *.elf *.hex *.out
 
 clean_win:
-	del *.o *.elf *.hex
+	del *.o *.elf *.hex *.out

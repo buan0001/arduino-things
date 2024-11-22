@@ -24,19 +24,21 @@ AVRDUDE = avrdude
 # AVRDUDE_FLAGS = -v -p $(MCU) -c $(PROGRAMMER) -P $(PORT) -D
 AVRDUDE_FLAGS = -v -p $(MCU) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -D
 
+FILE_NAME = traffic_light
+
 all: compile hex avr_run
 
 
 compile:
-	$(CC) $(CFLAGS) -o blink.o blink.c
+	$(CC) $(CFLAGS) -o $(FILE_NAME).o $(FILE_NAME).c
 
-hex: blink.o
+hex: $(FILE_NAME).o
 # -R .eeprom removes the eeprom section from the hex file
 # -O ihex specifies the output format to be ihex
-	avr-objcopy -O ihex blink.o blink.hex
+	avr-objcopy -O ihex $(FILE_NAME).o $(FILE_NAME).hex
 
 avr_run:
-	$(AVRDUDE) $(AVRDUDE_FLAGS) -U flash:w:blink.hex:i
+	$(AVRDUDE) $(AVRDUDE_FLAGS) -U flash:w:$(FILE_NAME).hex:i
 #$(AVRDUDE) $(AVRDUDE_FLAGS) -U flash:w:$(file).hex:i
 
 clean:

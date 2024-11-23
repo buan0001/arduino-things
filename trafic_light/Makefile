@@ -37,7 +37,6 @@ all: compile hex avr_run
 compile:
 	$(CC) $(CFLAGS) -c *.c
 	$(CC) $(CFLAGS) *.o
-#$(CC) $(CFLAGS) -o $(FILE_NAME).o $(FILE_NAME).c
 
 hex:
 	$(OBJCOPY) $(OBJCOPY_FLAGS)

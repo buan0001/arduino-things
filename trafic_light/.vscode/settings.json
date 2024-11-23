@@ -2,6 +2,7 @@
   "files.associations": {
     "traffic_light.h": "c",
     "ports_and_bits.h": "c",
-    "light_control.h": "c"
+    "light_control.h": "c",
+    "io.h": "c"
   }
 }
